@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameHub - Tic Tac Toe</title>
+  <style>
+    body {
+      background-color: #111827;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 5px;
+    }
+    .square {
+      width: 100px;
+      height: 100px;
+      background-color: #1f2937;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      border: 2px solid #374151;
+      cursor: pointer;
+    }
+    .status {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to GameHub</h1>
+  <div class="status" id="status">Next player: X</div>
+  <div class="board" id="board"></div>
+
+  <script>
+    const board = document.getElementById('board');
+    const statusDiv = document.getElementById('status');
+    let squares = Array(9).fill(null);
+    let xIsNext = true;
+
+    function renderBoard() {
+      board.innerHTML = '';
+      squares.forEach((value, i) => {
+        const square = document.createElement('div');
+        square.className = 'square';
+        square.textContent = value || '';
+        square.onclick = () => handleClick(i);
+        board.appendChild(square);
+      });
+      const winner = calculateWinner();
+      statusDiv.textContent = winner
+        ? `Winner: ${winner}`
+        : `Next player: ${xIsNext ? 'X' : 'O'}`;
+    }
+
+    function handleClick(i) {
+      if (squares[i] || calculateWinner()) return;
+      squares[i] = xIsNext ? 'X' : 'O';
+      xIsNext = !xIsNext;
+      renderBoard();
+    }
+
+    function calculateWinner() {
+      const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
+      for (const [a, b, c] of lines) {
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+          return squares[a];
+        }
+      }
+      return null;
+    }
+
+    renderBoard();
+  </script>
+</body>
+</html>
